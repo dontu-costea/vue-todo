@@ -1,16 +1,27 @@
 <template>
   <div class="todo-input__block">
-    <input type="text" class="todo-input" v-bind:value="todo.emptyTodo" @input="todo.emptyTodo = $event.target.value">
-    <button class="add-todo" type="submit">+</button>
+    <input type="text" class="todo-input" v-model="todos.todo">
+    <button class="add-todo" type="submit" @click="addTodo">+</button>
   </div>
 </template>
 
 <script>
+
+
 export default {
   data() {
     return {
-      todo: {
-        emptyTodo: ''
+      todos: {
+        todo: ''
+      }
+    }
+  },
+  methods: {
+    addTodo() {
+      this.todos.id = Date.now();
+      this.$emit('create', this.todos);
+      this.todos = {
+        todo: ""
       }
     }
   }

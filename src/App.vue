@@ -4,8 +4,11 @@
       <div class="todo__title">
         TODOLIST
       </div>
-        <add-todo-block/>
-        <todo-list :todos="todos"/>
+        <add-todo-block @create="addTodo"/>
+        <div class="no__todo" v-if="!todos.length">
+          TODOLIST is empty
+        </div>
+        <todo-list :todos="todos" @remove="removeTodo"/>
 
     </div>
   </div>
@@ -22,25 +25,18 @@ export default {
 },
   data() {
     return {
-      todos: [
-        {id: 1, todo:'123'},
-        {id: 2, todo:'456'}
-      ],
-      emptyTodo: '',
-      readonly: true,
+      todos: [],
     }
   },
   methods: {
-    addTodo() {
-      const newTodo = {
-        id: Date.now(),
-        todo: this.emptyTodo,
-      }
-      this.todos.push(newTodo);
-      this.emptyTodo = '';
+    addTodo(todo) {
+      this.todos.push(todo);
+    },
+    removeTodo(todo) {
+      this.todos = this.todos.filter(p => p.id !== todo.id)
     },
     editTodo() {
-      this.readonly = !this.readonly
+      
     }
   }
 }
@@ -74,5 +70,9 @@ export default {
   font-size: 30px;
   color: #4D5D4D;
   font-weight: bold;
+}
+.no__todo {
+  margin-top: 15px;
+  color: #777777;
 }
 </style>
