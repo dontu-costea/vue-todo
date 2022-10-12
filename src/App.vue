@@ -28,8 +28,7 @@ export default {
   },
   data() {
     return {
-      todos: [],
-      checkboxes: []
+      todos: []
     }
   },
   methods: {
