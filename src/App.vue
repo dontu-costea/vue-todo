@@ -10,7 +10,10 @@
         </div>
         <todo-list :todos="todos" @remove="removeTodo"/>
         <div class="state__block" v-if="todos.length">
-          <div class="state"> {{ this.todos.filter(check => check.checked === true).length }} of {{ todos.length }} tasks done</div>
+          <div class="state">
+            <div class="state__item">{{ calcChecked }} of {{ todos.length }} tasks done</div>
+            <div class="background__state" :style="{width: calcWidth + '%'}"></div>
+          </div>
           <button type="submit" class="remove__checked" @click="removeAllChecked(this.todos)">Remove checked <fa icon="fa-solid fa-xmark"/></button>
         </div>
     </div>
@@ -28,7 +31,8 @@ export default {
   },
   data() {
     return {
-      todos: []
+      todos: [],
+      state: 0
     }
   },
   methods: {
@@ -42,6 +46,14 @@ export default {
       for (let i = 0; i < arr.length; i++) {
         arr[i].checked = false
       }
+    }
+  },
+  computed: {
+    calcWidth() {
+      return ((this.calcChecked) / (this.todos.length) * 100)
+    },
+    calcChecked() {
+      return this.todos.filter(check => check.checked === true).length
     }
   }
 }
@@ -91,9 +103,25 @@ export default {
 .state {
   border: 1px solid rgb(158, 154, 154);
   width: 40%;
+  position: relative;
+}
+.background__state {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0%;
+  height: 100%;
+  background-color:#FBEC49;
+  transition: 0.5s all ease;
+}
+.state__item {
+  width: 100%;
   font-size: 16px;
   line-height: 30px;
   text-align: center;
+  position: relative;
+  color: #2F2F2F;
+  z-index: 1000;
 }
 .remove__checked {
   cursor: pointer;
