@@ -1,6 +1,6 @@
 <template>
   <div class="todo-input__block">
-    <input type="text" class="todo-input" v-model="todos.todo">
+    <input type="text" class="todo-input" v-model.trim="todos.todo" @keyup.enter="addTodo">
     <button class="add-todo" type="submit" @click="addTodo">+</button>
   </div>
 </template>
@@ -18,10 +18,13 @@ export default {
   },
   methods: {
     addTodo() {
-      this.todos.id = Date.now();
-      this.$emit('create', this.todos);
-      this.todos = {
-        todo: ""
+      if(this.todos.todo) {
+        this.todos.id = Date.now();
+        this.todos.checked = false;
+        this.$emit('create', this.todos);
+        this.todos = {
+          todo: ""
+        }
       }
     }
   }

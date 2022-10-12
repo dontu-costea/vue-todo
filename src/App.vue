@@ -9,7 +9,10 @@
           TODOLIST is empty
         </div>
         <todo-list :todos="todos" @remove="removeTodo"/>
-
+        <div class="state__block" v-if="todos.length">
+          <div class="state"> {{ this.todos.filter(check => check.checked === true).length }} of {{ todos.length }} tasks done</div>
+          <button type="submit" class="remove__checked" @click="removeAllChecked(this.todos)">Remove checked <fa icon="fa-solid fa-xmark"/></button>
+        </div>
     </div>
   </div>
 </template>
@@ -22,10 +25,11 @@ export default {
   components: {
     AddTodoBlock,
     TodoList
-},
+  },
   data() {
     return {
       todos: [],
+      checkboxes: []
     }
   },
   methods: {
@@ -35,11 +39,14 @@ export default {
     removeTodo(todo) {
       this.todos = this.todos.filter(p => p.id !== todo.id)
     },
-    editTodo() {
-      
+    removeAllChecked(arr) {
+      for (let i = 0; i < arr.length; i++) {
+        arr[i].checked = false
+      }
     }
   }
 }
+
 </script>
 
 <style>
@@ -74,5 +81,32 @@ export default {
 .no__todo {
   margin-top: 15px;
   color: #777777;
+}
+
+.state__block {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 15px;
+}
+.state {
+  border: 1px solid rgb(158, 154, 154);
+  width: 40%;
+  font-size: 16px;
+  line-height: 30px;
+  text-align: center;
+}
+.remove__checked {
+  cursor: pointer;
+  color: white;
+  background-color: #489CC1;
+  border: 1px solid #489CC1;
+  transition: 0.3s;
+  font-size: 14px;
+  widows: 30%;
+  padding: 0px 7px;
+}
+.remove__checked:hover {
+  background-color: #397B98;
 }
 </style>
