@@ -1,63 +1,71 @@
 <template>
   <div class="container">
     <div class="todo__block">
-      <div class="todo__title">
-        TODOLIST
-      </div>
-        <add-todo-block @create="addTodo"/>
-        <div class="no__todo" v-if="!todos.length">
-          TODOLIST is empty
-        </div>
-        <todo-list :todos="todos" @remove="removeTodo"/>
-        <div class="state__block" v-if="todos.length">
-          <div class="state">
-            <div class="state__item">{{ calcChecked }} of {{ todos.length }} tasks done</div>
-            <div class="background__state" :style="{width: calcWidth + '%'}"></div>
+      <div class="todo__title">TODOLIST</div>
+      <add-todo-block @create="addTodo" />
+      <div class="no__todo" v-if="!todos.length">TODOLIST is empty</div>
+      <todo-list :todos="todos" @remove="removeTodo" />
+      <div class="state__block" v-if="todos.length">
+        <div class="state">
+          <div class="state__item">
+            {{ checkedLength }} of {{ todos.length }} tasks done
           </div>
-          <button type="submit" class="remove__checked" @click="removeAllChecked(this.todos)">Remove checked <fa icon="fa-solid fa-xmark"/></button>
+          <div
+            class="background__state"
+            :style="{ width: calcWidth + '%' }"
+          ></div>
         </div>
+        <button
+          type="submit"
+          class="remove__checked"
+          @click="removeAllChecked(this.todos)"
+        >
+          Remove checked <fa icon="fa-solid fa-xmark" />
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import AddTodoBlock from "@/components/AddTodoBlock.vue";
-import TodoList from "@/components/TodoList.vue"
+import TodoList from "@/components/TodoList.vue";
 
 export default {
   components: {
     AddTodoBlock,
-    TodoList
+    TodoList,
   },
   data() {
     return {
       todos: [],
-      state: 0
-    }
+      state: 0,
+    };
   },
   methods: {
     addTodo(todo) {
       this.todos.push(todo);
     },
     removeTodo(todo) {
-      this.todos = this.todos.filter(p => p.id !== todo.id)
+      this.todos = this.todos.filter(
+        (p) => p.id !== todo.id
+      ); /* use splice and find index*/
     },
     removeAllChecked(arr) {
       for (let i = 0; i < arr.length; i++) {
-        arr[i].checked = false
+        arr[i].checked = false;
       }
-    }
+    },
   },
   computed: {
     calcWidth() {
-      return ((this.calcChecked) / (this.todos.length) * 100)
+      return (this.calcChecked / this.todos.length) * 100;
     },
-    calcChecked() {
-      return this.todos.filter(check => check.checked === true).length
-    }
-  }
-}
-
+    checkedLength() {
+      return this.todos.filter((check) => check.checked).length;
+    },
+  },
+};
 </script>
 
 <style>
@@ -67,7 +75,7 @@ export default {
   box-sizing: border-box;
 }
 .container {
-  background-color: #489CC1;
+  background-color: #489cc1;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -86,7 +94,7 @@ export default {
 }
 .todo__title {
   font-size: 30px;
-  color: #4D5D4D;
+  color: #4d5d4d;
   font-weight: bold;
 }
 .no__todo {
@@ -111,7 +119,7 @@ export default {
   top: 0;
   width: 0%;
   height: 100%;
-  background-color:#FBEC49;
+  background-color: #fbec49;
   transition: 0.5s all ease;
 }
 .state__item {
@@ -120,20 +128,20 @@ export default {
   line-height: 30px;
   text-align: center;
   position: relative;
-  color: #2F2F2F;
+  color: #2f2f2f;
   z-index: 1000;
 }
 .remove__checked {
   cursor: pointer;
   color: white;
-  background-color: #489CC1;
-  border: 1px solid #489CC1;
+  background-color: #489cc1;
+  border: 1px solid #489cc1;
   transition: 0.3s;
   font-size: 14px;
   widows: 30%;
   padding: 0px 7px;
 }
 .remove__checked:hover {
-  background-color: #397B98;
+  background-color: #397b98;
 }
 </style>
